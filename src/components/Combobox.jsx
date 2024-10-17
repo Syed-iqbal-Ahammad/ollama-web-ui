@@ -35,16 +35,19 @@ export function ComboboxDemo({ svalue }) {
     const lllm = async () => {
 
       let a = await LlmList()
-      setLlmLists(prevLlmLists => {
-        if (a.models.length !== prevLlmLists.length) {
-          return a.models.map(element => ({
-            value: element.model,
-            label: element.name
-          }))
+      if (a.models.length === 0) {
+      
+        setLlmLists(prevLlmLists => {
+          if (a.models.length !== prevLlmLists.length) {
+            return a.models.map(element => ({
+              value: element.model,
+              label: element.name
+            }))
         }
         return prevLlmLists
       })
     }
+  }
   
     lllm()
     setLoading(false)
