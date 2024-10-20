@@ -2,7 +2,7 @@
 
 export const LlmList = async (url) => {
     try {
-        let res = await fetch(`${url}/api/tags`, { cache: 'no-store' })
+        let res = await fetch(`${url}/api/tags`)
         return res.json()
     }
     catch (error) {
@@ -21,7 +21,7 @@ export const PullModel = async (model, url) => {
                 model: model,
                 stream: false,
             }),
-        }, { cache: 'no-store' })
+        })
         return res.json()
     }
     catch (error) {
@@ -43,7 +43,7 @@ export const ChatLama = async (model, response, abortController) => {
                 stream: true
             }),
             signal: abortController.signal
-        }, { cache: 'no-store' })
+        })
         return res
     }
     catch (error) {
