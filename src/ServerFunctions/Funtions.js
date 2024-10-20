@@ -1,4 +1,4 @@
-'use client'
+'use server'
 
 export const LlmList = async (url) => {
     try {
