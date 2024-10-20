@@ -220,7 +220,7 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                 stream: true
             }),
             signal: abortController.signal
-        })
+        }, { cache: 'force-cache' })
         const reader = res.body.getReader();
         let result =
         {
