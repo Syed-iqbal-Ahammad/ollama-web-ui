@@ -85,7 +85,8 @@ const TempChat = () => {
     }
     const ollamaChat = async (model, response, abortController) => {
         setgenerating("funload")
-        let res = await fetch('http://localhost:11434/api/chat', {
+        let c = JSON.parse(localStorage.getItem('currentUser'))
+        let res = await fetch(`${c[0].OLLAMA_HOST}/api/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

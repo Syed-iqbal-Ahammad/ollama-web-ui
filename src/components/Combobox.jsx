@@ -33,8 +33,8 @@ export function ComboboxDemo({ svalue }) {
   React.useEffect(() => {
     setLoading(true)
     const lllm = async () => {
-
-      let a = await LlmList()
+      let c = JSON.parse(localStorage.getItem('currentUser'))
+      let a = await LlmList(c[0].OLLAMA_HOST)
       if (a.models.length > 0) {
       
         setLlmLists(prevLlmLists => {

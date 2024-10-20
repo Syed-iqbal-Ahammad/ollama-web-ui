@@ -28,7 +28,8 @@ export function Pullmodel({ setIsOpen }) {
             setmessage('')
             setPulling(true)
             try {
-                let d = await PullModel(model);
+                let c = JSON.parse(localStorage.getItem('currentUser'))
+                let d = await PullModel(model,c[0].OLLAMA_HOST);
                 if (d.status === 'success') {
                     setmsgType('success')
                     setmessage(`sucessfully pulled ${model}`)
