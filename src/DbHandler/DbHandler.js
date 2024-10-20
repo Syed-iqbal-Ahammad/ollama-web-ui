@@ -107,6 +107,15 @@ const CUserChats = async (url, id) => {
         console.log(error.message)
     }
 }
+const EditOllamaHost = async (url, id, host) => {
+    try {
+        await connectDB(`${url}/ollama`);
+        await Login.updateOne({ _id: id }, { $set: { OLLAMA_HOST: host } })
+        return 'Success'
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 const DeleteChat = async (url, id, loginid) => {
     try {
         await connectDB(`${url}/ollama`);
@@ -158,6 +167,7 @@ export {
     EditUserName,
     EditChatContent,
     DeleteUser,
+    EditOllamaHost,
 }
 
 

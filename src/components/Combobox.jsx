@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
-import { LlmList } from "@/app/api/ollama/route";
+import { LlmList } from "@/ServerFunctions/Funtions";
 import { useAppDispatch } from '../lib/hooks'
 import { selectvalue } from "@/lib/features/Llm/LlmSelect";
 import { cn } from "@/lib/utils"

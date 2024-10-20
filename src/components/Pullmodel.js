@@ -9,7 +9,7 @@ import {
     DialogTrigger,
     DialogClose,
 } from "@/components/ui/dialog"
-import { PullModel } from "@/app/api/ollama/route"
+import { PullModel } from "@/ServerFunctions/Funtions"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react";

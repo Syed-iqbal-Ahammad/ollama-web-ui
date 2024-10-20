@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 //ui
-
-
 import { ComboboxDemo } from "@/components/Combobox";
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
@@ -17,7 +15,6 @@ import { IoMdArrowRoundUp } from "react-icons/io";
 import { PiCopyThin } from "react-icons/pi";
 import { PiCheckCircleDuotone } from "react-icons/pi";
 import { FaSquare } from "react-icons/fa";
-
 import { useRouter } from 'next/navigation'
 
 //redux hook
@@ -113,12 +110,16 @@ const TempChat = () => {
                 result.done = true
                 break;
             }
-            try {
-                result.content += await JSON.parse(new TextDecoder('utf-8').decode(value)).message.content;
-            } catch (error) {
-                console.error("Error parsing JSON", error);
-                break;
-            }
+            const responseText = new TextDecoder('utf-8').decode(value);
+            const jsonObjects = responseText.split(/\n/).filter(Boolean);
+            jsonObjects.forEach((jsonObject) => {
+                try {
+                    const parsedObject = JSON.parse(jsonObject);
+                    result.content += parsedObject.message.content;
+                } catch (error) {
+                    console.error("Error parsing JSON", error);
+                }
+            });
             if (loadingref.current) {
                 loadingref.current.style.display = 'none'
             }

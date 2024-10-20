@@ -40,7 +40,6 @@ import Image from 'next/image'
 import { OllamaFooter } from "./OllamaFooter";
 import { OllamaDropD } from "./OllamaDropD";
 import { CUserChats } from "@/DbHandler/DbHandler";
-import { abort } from '@/app/api/ollama/route';
 import { EditChatContent } from '@/DbHandler/DbHandler';
 import { OllamaHeader } from './OllamaHeader';
 
@@ -166,13 +165,12 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
             return JSON.parse(JSON.stringify(fchats))
         }
     }
-    
+
 
     const handleChatButtonClick = async () => {
         if (generating !== '') {
             try {
                 abortController.abort();
-                abort();
                 setgenerating('');
                 setbutton(false);
                 setAbortController(null)
@@ -235,12 +233,16 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                 result.done = true
                 break;
             }
-            try {
-                result.content += await JSON.parse(new TextDecoder('utf-8').decode(value)).message.content;
-            } catch (error) {
-                console.error("Error parsing JSON", error);
-                break;
-            }
+            const responseText = new TextDecoder('utf-8').decode(value);
+            const jsonObjects = responseText.split(/\n/).filter(Boolean);
+            jsonObjects.forEach((jsonObject) => {
+                try {
+                    const parsedObject = JSON.parse(jsonObject);
+                    result.content += parsedObject.message.content;
+                } catch (error) {
+                    console.error("Error parsing JSON", error);
+                }
+            });
             if (loadingref.current) {
                 loadingref.current.style.display = 'none'
             }
@@ -334,7 +336,7 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                                     })}
                                 </div>
                             </div>
-                          
+
                             <div className="flex justify-center items-center p-1 border-t-border border-t-2 py-2 ">
                                 <OllamaFooter chatid={chatid} />
                             </div>

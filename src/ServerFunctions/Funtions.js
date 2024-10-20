@@ -1,19 +1,9 @@
 'use server'
 
-import ollama from 'ollama'
-
 export const LlmList = async () => {
     try{
-        let res = await ollama.list()
-        return res
-    }
-    catch (error) {
-        console.log(error.message)
-    }
-}
-export const abort = async () => {
-    try{
-        ollama.abort()
+        let res = await fetch('http://localhost:11434/api/tags', { cache: 'no-store' })
+        return res.json()
     }
     catch (error) {
         console.log(error.message)
@@ -22,10 +12,17 @@ export const abort = async () => {
 
 export const PullModel = async (model) => {
     try{
-        return await ollama.pull({
-            model: model,
-            stream: false,
-        })
+        let res = await fetch('http://localhost:11434/api/pull', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: model,
+                stream: false,
+            }),
+        }, { cache: 'no-store' })
+        return res.json()
     }
     catch (error) {
         console.log(error.message)
@@ -46,7 +43,7 @@ export const ChatLama = async (model, response, abortController) => {
                 stream: true
             }),
             signal: abortController.signal
-        })
+        }, { cache: 'no-store' })
         return res
     }
     catch (error) {

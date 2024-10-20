@@ -11,6 +11,7 @@ const LoginSchema = new Schema({
     password: { type: String, required: true },
     date: { type: Date, default: Date.now },
     MongoStringUrl: { type: String, required: true },
+    OLLAMA_HOST: { type: String, default: "http://localhost:11434" },
     chats: [{ type: String, ref: 'Chat' }]
 });
 
