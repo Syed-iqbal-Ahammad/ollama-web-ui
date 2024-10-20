@@ -34,21 +34,22 @@ export function ComboboxDemo({ svalue }) {
     setLoading(true)
     const lllm = async () => {
       let c = JSON.parse(localStorage.getItem('currentUser'))
-      let a = await LlmList(c[0].OLLAMA_HOST)
-      if (a.models.length > 0) {
-      
-        setLlmLists(prevLlmLists => {
-          if (a.models.length !== prevLlmLists.length) {
-            return a.models.map(element => ({
-              value: element.model,
-              label: element.name
-            }))
+      if (c) {
+        let a = await LlmList(c[0].OLLAMA_HOST)
+        if (a.models.length > 0) {
+          setLlmLists(prevLlmLists => {
+            if (a.models.length !== prevLlmLists.length) {
+              return a.models.map(element => ({
+                value: element.model,
+                label: element.name
+              }))
+            }
+            return prevLlmLists
+          })
         }
-        return prevLlmLists
-      })
+      }
     }
-  }
-  
+
     lllm()
     setLoading(false)
   }, [open])

@@ -29,15 +29,17 @@ export function Pullmodel({ setIsOpen }) {
             setPulling(true)
             try {
                 let c = JSON.parse(localStorage.getItem('currentUser'))
-                let d = await PullModel(model,c[0].OLLAMA_HOST);
-                if (d.status === 'success') {
-                    setmsgType('success')
-                    setmessage(`sucessfully pulled ${model}`)
-                    setIsOpen(false)
-                } else {
-                    setmsgType('error')
-                    setmessage(`failed to pull ${model}`)
-                    setIsOpen(false)
+                if (c) {
+                    let d = await PullModel(model, c[0].OLLAMA_HOST);
+                    if (d.status === 'success') {
+                        setmsgType('success')
+                        setmessage(`sucessfully pulled ${model}`)
+                        setIsOpen(false)
+                    } else {
+                        setmsgType('error')
+                        setmessage(`failed to pull ${model}`)
+                        setIsOpen(false)
+                    }
                 }
             } catch (error) {
                 setmsgType('error')
@@ -88,7 +90,7 @@ export function Pullmodel({ setIsOpen }) {
                     <DialogClose asChild >
                         <Button onClick={() => { handleClick() }} className="w-full h-10 font-bold">
                             {!Pulling && 'Pull Model'}
-                            {Pulling && <Loader/>}
+                            {Pulling && <Loader />}
                         </Button>
                     </DialogClose>
                 </DialogFooter>
