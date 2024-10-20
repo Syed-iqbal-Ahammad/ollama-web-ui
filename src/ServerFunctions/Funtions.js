@@ -6,7 +6,7 @@ export const LlmList = async (url) => {
         return res.json()
     }
     catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
 }
 
@@ -25,7 +25,7 @@ export const PullModel = async (model, url) => {
         return res
     }
     catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
 }
 
@@ -47,7 +47,7 @@ export const ChatLama = async (model, response, abortController) => {
         return res
     }
     catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
 }
 

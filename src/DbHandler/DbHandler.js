@@ -23,10 +23,10 @@ const SignUp = async (url, name, email, password) => {
             });
             return "Success"
         } catch (error) {
-            return error.message
+            return error
         }
     } catch (error) {
-        return error.message
+        return error
     }
 };
 
@@ -43,11 +43,11 @@ const LogIn = async (url, email, password) => {
                 return 'Invalid credentials'
             }
         } catch (error) {
-            return error.message
+            return error
         }
     }
     catch (error) {
-        return error.message
+        return error
     }
 }
 
@@ -59,7 +59,7 @@ const currentUser = async (url, email) => {
             return data
         }
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
 
 }
@@ -77,7 +77,7 @@ const SaveChat = async (url, model, chat, id, chatid) => {
         await Login.updateOne({ _id: id }, { $push: { chats: chatid } })
         return "Success"
     } catch (error) {
-        return error.message
+        return error
     }
 }
 const LoadChat = async (url, id) => {
@@ -86,7 +86,7 @@ const LoadChat = async (url, id) => {
         let data = await Chat.find({ _id: id })
         return data
     } catch (error) {
-        return error.message
+        return error
     }
 }
 const UpdateChat = async (url, id, message) => {
@@ -95,7 +95,7 @@ const UpdateChat = async (url, id, message) => {
         await Chat.updateOne({ _id: id }, { $set: { messages: message, timestamp: Date.now() } })
         return 'Success'
     } catch (error) {
-        return error.message
+        return error
     }
 }
 const CUserChats = async (url, id) => {
@@ -104,7 +104,7 @@ const CUserChats = async (url, id) => {
         let data = await Chat.find({ Login: id })
         return data
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
 }
 const EditOllamaHost = async (url, id, host) => {
@@ -113,7 +113,7 @@ const EditOllamaHost = async (url, id, host) => {
         await Login.updateOne({ _id: id }, { $set: { OLLAMA_HOST: host } })
         return 'Success'
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
 }
 const DeleteChat = async (url, id, loginid) => {
@@ -123,7 +123,7 @@ const DeleteChat = async (url, id, loginid) => {
         await Login.updateOne({ _id: loginid }, { $pull: { chats: id } })
         return 'Success'
     } catch (error) {
-        return error.message
+        return error
     }
 }
 const EditChatContent = async (url, id, content) => {
@@ -132,7 +132,7 @@ const EditChatContent = async (url, id, content) => {
         await Chat.updateOne({ _id: id }, { $set: { content: content } })
         return 'Success'
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
 }
 const EditUserName = async (url, id, name) => {
@@ -141,7 +141,7 @@ const EditUserName = async (url, id, name) => {
         await Login.updateOne({ _id: id }, { $set: { name: name } })
         return 'Success'
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
 }
 const DeleteUser = async (url, id) => {
@@ -150,7 +150,7 @@ const DeleteUser = async (url, id) => {
         await Login.deleteOne({ _id: id })
         return 'Success'
     } catch (error) {
-        return error.message
+        return error
     }
 }
 
