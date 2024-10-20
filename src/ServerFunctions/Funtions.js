@@ -22,7 +22,7 @@ export const PullModel = async (model, url) => {
                 stream: false,
             }),
         })
-        return res.json()
+        return res
     }
     catch (error) {
         console.log(error.message)
