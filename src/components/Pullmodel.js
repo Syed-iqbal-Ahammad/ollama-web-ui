@@ -9,13 +9,13 @@ import {
     DialogTrigger,
     DialogClose,
 } from "@/components/ui/dialog"
-import { PullModel } from "@/ServerFunctions/Funtions"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react";
 import { MdOutlineFileDownload } from "react-icons/md";
 import Loader from "./ui/Loader"
 import ToastSonner from "./ToastSonner";
+import { Toaster, toast } from "sonner"
 
 export function Pullmodel({ setIsOpen }) {
     const [model, setmodel] = useState('')
@@ -24,34 +24,77 @@ export function Pullmodel({ setIsOpen }) {
     const [msgType, setmsgType] = useState("")
     const handleClick = async () => {
         if (model.length > 0) {
-            setmsgType('')
-            setmessage('')
-            setPulling(true)
+            setmsgType('');
+            setmessage('');
+            setPulling(true);
+            let temp = ''
             try {
-                let c = JSON.parse(localStorage.getItem('currentUser'))
+                let c = JSON.parse(localStorage.getItem('currentUser'));
                 if (c) {
-                    let d = await PullModel(model, c[0].OLLAMA_HOST);
-                    if (d.status === 'success') {
-                        setmsgType('success')
-                        setmessage(`sucessfully pulled ${model}`)
-                        setIsOpen(false)
-                    } else {
-                        setmsgType('error')
-                        setmessage(`failed to pull ${model}`)
-                        setIsOpen(false)
+                    const res = await fetch('/api/pull', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            model: model,
+                            stream: true,
+                            OLLAMA_HOST: c[0].OLLAMA_HOST,
+                        }),
+                    });
+                    const reader = res.body.getReader();
+                    const decoder = new TextDecoder();
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        const chunk = decoder.decode(value);
+                        const jsonObjects = chunk.split(/\n/).filter(Boolean);
+                        jsonObjects.forEach((jsonObject) => {
+                            try {
+                                const parsedObject = JSON.parse(jsonObject);
+                                if (temp !== parsedObject.status) {
+                                    if (parsedObject.status !== undefined && parsedObject.status !== 'success' ) {
+                                        toast.success(parsedObject.status, {
+                                            position: 'top-center',
+                                        })
+                                        setIsOpen(false)
+                                    } else if (parsedObject.status === 'success') {
+                                        toast.success(`successfully pulled ${model}`, {
+                                            position: 'top-center',
+                                        })
+                                        setIsOpen(false)
+                                    } else {
+                                        toast.error(`Invalid model name or failed to pull ${model}`, {
+                                            position: 'top-center',
+                                        })
+                                    }
+                                    setIsOpen(false)
+                                }
+                                temp = parsedObject.status
+                            } catch (error) {
+                                console.error('Error parsing JSON', error);
+                                setIsOpen(false)
+                            }
+                        });
                     }
+                    setPulling(false);
+                    setIsOpen(false)
                 }
             } catch (error) {
-                setmsgType('error')
-                setmessage(error.message)
+                setPulling(false);
                 setIsOpen(false)
+                setmsgType('error');
+                setmessage('An error occurred while pulling the model');
             }
         } else {
-            setmsgType('warning')
-            setmessage('Please enter a model name')
+            setPulling(false);
             setIsOpen(false)
+            setmsgType('warning');
+            setmessage('Please enter a model name');
         }
-    }
+    };
+
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             handleClick()
@@ -60,6 +103,7 @@ export function Pullmodel({ setIsOpen }) {
     return (
         <Dialog>
             {message.length > 0 && <ToastSonner msg={message} type={'top-center'} msgtype={msgType} />}
+            <Toaster richColors />
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full flex justify-start items-center gap-3 border-none shadow-none">
                     <div>

@@ -150,9 +150,6 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
             loadchat()
         }
     }, [chatid, router])
-
-
-
     const currentchats = async () => {
         let currentUser = JSON.parse(localStorage.getItem('currentUser'))
         if (currentUser) {
@@ -165,8 +162,6 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
             return JSON.parse(JSON.stringify(fchats))
         }
     }
-
-
     const handleChatButtonClick = async () => {
         if (generating !== '') {
             try {
@@ -207,9 +202,9 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
         }
     }
     const ollamaChat = async (model, response, abortController) => {
-        setgenerating("funload")
+        setgenerating("funload");
         let c = JSON.parse(localStorage.getItem('currentUser'))
-        let res = await fetch(`${c[0].OLLAMA_HOST}/api/chat`, {
+        let res = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -217,13 +212,16 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
             body: JSON.stringify({
                 model: model,
                 messages: response,
-                stream: true
+                stream: true,
+                OLLAMA_HOST: c[0].OLLAMA_HOST,
             }),
             signal: abortController.signal
-        }, { cache: 'force-cache' })
+        });
+        if (!res.ok) {
+            throw new Error('Failed to fetch chat data. Server responded with an error.');
+        }
         const reader = res.body.getReader();
-        let result =
-        {
+        let result = {
             "role": "assistant",
             "content": "",
             done: false
@@ -231,11 +229,12 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
         while (true) {
             const { done, value } = await reader.read();
             if (done) {
-                result.done = true
+                result.done = true;
                 break;
             }
             const responseText = new TextDecoder('utf-8').decode(value);
             const jsonObjects = responseText.split(/\n/).filter(Boolean);
+
             jsonObjects.forEach((jsonObject) => {
                 try {
                     const parsedObject = JSON.parse(jsonObject);
@@ -244,17 +243,20 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                     console.error("Error parsing JSON", error);
                 }
             });
+
             if (loadingref.current) {
-                loadingref.current.style.display = 'none'
+                loadingref.current.style.display = 'none';
             }
-            setgenerating('gen')
-            setFinalResponse([...response, result])
+            setgenerating('gen');
+            setFinalResponse([...response, result]);
+
             if (loadingref.current) {
-                loadingref.current.style.display = 'none'
+                loadingref.current.style.display = 'none';
             }
         }
-        setgenerating('')
-    }
+        setgenerating('');
+    };
+
     const handleCopy = () => {
         setcopy(true);
         setTimeout(() => {

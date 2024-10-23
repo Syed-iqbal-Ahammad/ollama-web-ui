@@ -84,9 +84,9 @@ const TempChat = () => {
         }
     }
     const ollamaChat = async (model, response, abortController) => {
-        setgenerating("funload")
+        setgenerating("funload");
         let c = JSON.parse(localStorage.getItem('currentUser'))
-        let res = await fetch(`${c[0].OLLAMA_HOST}/api/chat`, {
+        let res = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -94,13 +94,16 @@ const TempChat = () => {
             body: JSON.stringify({
                 model: model,
                 messages: response,
-                stream: true
+                stream: true,
+                OLLAMA_HOST: c[0].OLLAMA_HOST,
             }),
             signal: abortController.signal
-        },{ cache: 'force-cache' })
+        });
+        if (!res.ok) {
+            throw new Error('Failed to fetch chat data. Server responded with an error.');
+        }
         const reader = res.body.getReader();
-        let result =
-        {
+        let result = {
             "role": "assistant",
             "content": "",
             done: false
@@ -108,11 +111,12 @@ const TempChat = () => {
         while (true) {
             const { done, value } = await reader.read();
             if (done) {
-                result.done = true
+                result.done = true;
                 break;
             }
             const responseText = new TextDecoder('utf-8').decode(value);
             const jsonObjects = responseText.split(/\n/).filter(Boolean);
+
             jsonObjects.forEach((jsonObject) => {
                 try {
                     const parsedObject = JSON.parse(jsonObject);
@@ -121,18 +125,19 @@ const TempChat = () => {
                     console.error("Error parsing JSON", error);
                 }
             });
+
             if (loadingref.current) {
-                loadingref.current.style.display = 'none'
+                loadingref.current.style.display = 'none';
             }
-            setgenerating('gen')
-            setFinalResponse([...response, result])
+            setgenerating('gen');
+            setFinalResponse([...response, result]);
+
             if (loadingref.current) {
-                loadingref.current.style.display = 'none'
+                loadingref.current.style.display = 'none';
             }
         }
-        setgenerating('')
-        console.log(FinalResponse)
-    }
+        setgenerating('');
+    };
     const handleCopy = () => {
         setcopy(true);
         setTimeout(() => {

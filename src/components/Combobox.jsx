@@ -36,7 +36,8 @@ export function ComboboxDemo({ svalue }) {
       let c = JSON.parse(localStorage.getItem('currentUser'))
       if (c) {
         let a = await LlmList(c[0].OLLAMA_HOST)
-        if (a.models.length > 0) {
+        console.log(a)
+        if (a?.models.length > 0) {
           setLlmLists(prevLlmLists => {
             if (a.models.length !== prevLlmLists.length) {
               return a.models.map(element => ({
