@@ -164,7 +164,7 @@ const TempChat = () => {
                 <div className="px-6 py-3 h-[100vh] w-[100vw] ">
                     <div className=" grid grid-rows-[1fr_8fr_1fr] h-[100vh]  ">
                         <nav className="flex justify-between p-2  ">
-                            <ComboboxDemo />
+                            <ComboboxDemo svalue={currentselectvalue} />
                             <div>
                                 {currentUser ? <Button onClick={() => router.push('/')} variant="auth" className='rounded-lg p-3'>Home</Button> : <Button variant="auth" onClick={() => router.push('/auth')} className='rounded-lg px-3 py-4'>Sign Up</Button>}
                             </div>
