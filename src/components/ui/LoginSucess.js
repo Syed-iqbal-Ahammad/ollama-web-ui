@@ -28,7 +28,7 @@ const SuccessCardPopup = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div ref={cardRef} className="relative">
-                        <Card className="flex flex-col justify-center items-center gap-10 text-foreground p-6 w-[30vw] h-[50vh]">
+                        <Card className="flex flex-col justify-center items-center gap-10 text-foreground p-6 ">
                             <CardHeader>
                                 <CardTitle className="text-foreground text-3xl">Login Success</CardTitle>
                             </CardHeader>

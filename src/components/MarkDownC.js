@@ -9,7 +9,7 @@ const MarkDown = ({ content,children }) => {
     return (
         <div className="markdown-container text-foreground">
             <Markdown
-                className="prose text-foreground "
+                className=" md:text-base text-xs prose text-foreground "
                 remarkPlugins={[remarkGfm]}
                 components={{
                     code({ node, inline, className, children, ...props }) {
@@ -18,7 +18,7 @@ const MarkDown = ({ content,children }) => {
                             <CodeBlock className={className}>{children}</CodeBlock>
                         ) : (
                             <code className={className} {...props}>
-                                <div className="p-4 text-foreground">{children}</div>
+                                <div className=" p-4 text-foreground">{children}</div>
                             </code>
                         );
                     },

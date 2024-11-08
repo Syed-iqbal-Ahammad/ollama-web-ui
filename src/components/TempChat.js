@@ -150,7 +150,7 @@ const TempChat = () => {
             buttonRef.current.click()
         }
     }
-    const textChange = (e) => {
+    const textChange = () => {
         if (textarea.current.value.length > 0) {
             setbutton(true)
         } else {
@@ -181,7 +181,7 @@ const TempChat = () => {
                                                 height={385}
                                                 alt="#"
                                                 priority={true}
-                                                className='size-auto'
+                                                className='md:size-auto size-[50vw]'
                                             />
                                         </div>}
 
@@ -193,9 +193,9 @@ const TempChat = () => {
                                                     {item.role === 'user' &&
                                                         <div className=''>
                                                             <div className='flex items-start justify-end gap-3 '>
-                                                                <span className='text-left relative top-4 max-w-xl rounded-l-2xl rounded-br-2xl rounded-tr-sm break-words text-foreground bg-secondary  px-5 py-2 whitespace-pre-wrap' >{item.content}
+                                                                <span className='md:text-base text-xs  text-left relative top-4 max-w-xl rounded-l-2xl rounded-br-2xl rounded-tr-sm break-words text-foreground bg-secondary  px-5 py-2 whitespace-pre-wrap' >{item.content}
                                                                 </span>
-                                                                <span className='text-foreground bg-secondary text-2xl flex items-center justify-center pb-1.5 rounded-full w-10 h-10 overflow-hidden '>s</span>
+                                                                <span className='md:text-2xl text-xs text-foreground bg-secondary flex items-center justify-center md:pb-1.5 rounded-full md:w-10 md:h-10 w-7 h-7 overflow-hidden '>s</span>
                                                             </div>
                                                         </div>
                                                     }
@@ -223,7 +223,7 @@ const TempChat = () => {
                                                         />
                                                         <div className=' max-w-3xl break-words overflow-y-hidden overflow-x-auto  '>
                                                             <div className=' leading-3 pb-3 '>
-                                                                <MarkDown content={item.content} />
+                                                                <MarkDown  content={item.content} />
                                                                 <CopyToClipboard text={item.content} className='cursor-pointer my-2' onCopy={handleCopy} >
                                                                     {copy ? <PiCheckCircleDuotone /> : <PiCopyThin />}
                                                                     {/* some thing wrong here */}
@@ -239,8 +239,8 @@ const TempChat = () => {
                             </div>
                         </div>
                         <div className="relative flex justify-center items-center">
-                            <div className="bg-secondary w-2/3 fixed flex justify-center items-center rounded-full py-2 px-4 gap-2 bottom-6">
-                                <Textarea ref={textarea} onKeyDown={handleKeyDown} onChange={() => { textChange() }} autoFocus placeholder={`${currentselectvalue ? `Message to ${currentselectvalue}` : ''}`} id="message" name="chat" rows="1" className='' disabled={!currentselectvalue} />
+                            <div className="bg-secondary  w-2/3 fixed flex justify-center items-center rounded-full py-2 px-4 gap-2 bottom-6">
+                                <Textarea ref={textarea} onKeyDown={handleKeyDown} onChange={() => { textChange() }} autoFocus placeholder={`${currentselectvalue ? `Message to ${currentselectvalue}` : ''}`} id="message" name="chat" rows="1" className='placeholder:text-xs sm:placeholder:text-sm' disabled={!currentselectvalue} />
                                 <div className="flex justify-center items-center gap-3">
                                     <Button variant={generating !== '' ? "gen" : "send"} ref={buttonRef} size={generating !== '' ? "gen" : "send"} disabled={generating !== '' ? false : !currentselectvalue || !button} onClick={() => { handleChatButtonClick() }} >
                                         {generating === 'funload' || generating === 'gen' ? <FaSquare className='size-3' /> : <IoMdArrowRoundUp className='size-5' />}

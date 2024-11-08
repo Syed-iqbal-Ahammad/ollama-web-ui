@@ -4,10 +4,14 @@ import { useEffect, useRef, useState } from "react";
 
 //ui
 import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from "@/components/ui/resizable"
+    Sidebar,
+    SidebarContent,
+    SidebarHeader,
+    SidebarInset,
+    SidebarProvider,
+    SidebarTrigger,
+    SidebarFooter,
+} from "@/components/ui/sidebar"
 
 import { ComboboxDemo } from "@/components/Combobox";
 import { Textarea } from "@/components/ui/textarea"
@@ -16,15 +20,12 @@ import Loading from "./ui/Loading";
 import CopyToClipboard from "react-copy-to-clipboard";
 import MarkDown from "./MarkDownC";
 
-
 // icons
 import { IoMdArrowRoundUp } from "react-icons/io";
 import { PiCopyThin } from "react-icons/pi";
 import { PiCheckCircleDuotone } from "react-icons/pi";
 import { FaSquare } from "react-icons/fa";
 import { TbEdit } from "react-icons/tb";
-import { FiSidebar } from "react-icons/fi";
-
 
 //redux hook
 import { useAppSelector } from '@/lib/hooks'
@@ -54,18 +55,12 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
     const [abortController, setAbortController] = useState(null);
     const [copy, setcopy] = useState(false)
     const [Charts, setCharts] = useState([])
-    const [panneldisplay, setpanneldisplay] = useState(false)
     const [name, setname] = useState('')
-    const [pannelSize, setpannelSize] = useState()
 
     const textarea = useRef()
     const buttonRef = useRef()
     const loadingref = useRef()
-    const pannel = useRef()
-    const Closepannel = useRef()
     const chatRef = useRef([])
-    const chatContainerRef = useRef(null);
-
 
     useEffect(() => {
         if (theme !== localStorage.getItem('theme')) {
@@ -269,31 +264,14 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
             buttonRef.current.click()
         }
     }
-    const textChange = (e) => {
+    const textChange = () => {
         if (textarea.current.value.length > 0) {
             setbutton(true)
         } else {
             setbutton(false)
         }
     }
-    const Pannel = () => {
-        setpanneldisplay(!panneldisplay)
-        if (pannel.current) {
-            const newSize = pannel.current.getSize() === 82 ? 100 : 82;
-            let currentSize = pannel.current.getSize();
-            const animateResize = (targetSize) => {
-                const step = currentSize < targetSize ? 1 : -1;
-                const interval = setInterval(() => {
-                    currentSize += step;
-                    pannel.current.resize(currentSize);
-                    if (currentSize === targetSize) {
-                        clearInterval(interval);
-                    }
-                }, 10);
-            };
-            animateResize(newSize);
-        }
-    }
+
     const keydown = async (e, index, id) => {
         e.stopPropagation()
         if (e.key === 'Enter') {
@@ -305,30 +283,31 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
         }
     }
 
-    const handleResize = (s) => {
-        setpannelSize(s);
-    };
-
     return (
         <>
-            <div className="bg-background text-foreground w-full h-full select-none ">
+            <div className="bg-background text-foreground w-full h-full select-none overflow-hidden ">
                 <Toaster richColors />
-                <ResizablePanelGroup
-                    direction="horizontal"
-                    className="rounded-lg"
-                >
-                    <ResizablePanel defaultSize={18}  >
-                        <div className={`w-full h-full p-2 grid grid-flow-row grid-rows-[1fr_10fr_1fr] `}>
+                <SidebarProvider className="w-full h-full">
+                    <Sidebar variant="inset" className="w-auto h-full " >
+                        <SidebarHeader className="bg-background ">
                             <div className="flex justify-between  px-1 items-center">
                                 <div>
-                                    {pannelSize === 82 && <FiSidebar className="cursor-pointer" size={24} onClick={() => { Pannel() }} />}
+                                    <Image
+                                        src="/lama.png"
+                                        width={30}
+                                        height={30}
+                                        className={` dark:invert  size-auto`}
+                                        alt="#"
+                                    />
                                 </div>
                                 <div >
                                     <TbEdit className="cursor-pointer " title="New Chat" onClick={() => { router.push('/') }} size={27} />
                                 </div>
                             </div>
-                            <div className="p-1 overflow-y-auto overflow-x-hidden w-full">
-                                <div className={`flex flex-col gap-1 overflow-y-auto overflow-x-hidden w-full`}>
+                        </SidebarHeader>
+                        <SidebarContent className="bg-background">
+                            <div className="p-1 w-full">
+                                <div className={`flex flex-col gap-1  w-full`}>
                                     {Charts.length > 0 && Charts.map((item, index) => {
                                         return <div className="flex gap-1 items-center justify-between bg-background text-foreground hover:bg-accent hover:text-accent-foreground p-2 rounded-md" key={index}>
                                             <div className="cursor-pointer w-4/5" onClick={(e) => { e.preventDefault(), router.push(`/c/${item._id}`) }}>
@@ -339,28 +318,27 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                                     })}
                                 </div>
                             </div>
-
+                        </SidebarContent>
+                        <SidebarFooter className="bg-background">
                             <div className="flex justify-center items-center p-1 border-t-border border-t-2 py-2 ">
                                 <OllamaFooter chatid={chatid} />
                             </div>
-                        </div>
-                    </ResizablePanel>
-
-                    <ResizableHandle withHandle />
-
-                    <ResizablePanel ref={pannel} onResize={handleResize} defaultSize={82} maxSize={100} minSize={82} className="px-5 h-[100vh] bg-background ">
-                        <div ref={chatContainerRef} className=" grid grid-rows-[1fr_8fr_1fr] h-[100vh]  ">
-
-                            <nav className="flex justify-between  items-center px-2 ">
+                        </SidebarFooter>
+                    </Sidebar>
+                    <SidebarInset className="flex flex-col">
+                        <header className="flex h-14 items-center justify-between border-b px-2 lg:h-[60px]">
+                            <div className='flex justify-between  items-center px-2'>
+                                <SidebarTrigger />
                                 <div className="flex gap-3 justify-center items-center">
-                                    {pannelSize === 100 && <FiSidebar className={`cursor-pointer ${panneldisplay ? 'block' : 'hidden'}`} ref={Closepannel} size={24} onClick={() => { Pannel() }} />}
                                     <ComboboxDemo svalue={currentselectvalue} />
                                 </div>
-                                <OllamaHeader />
-                            </nav>
-                            <div className=" py-3 px-10 flex justify-center items-center overflow-auto ">
-                                <div className="w-full h-full overflow-auto pb-16 ">
-                                    <div className='m-auto w-3/4 '>
+                            </div>
+                            <OllamaHeader />
+                        </header>
+                        <main className="flex-1 overflow-auto ">
+                            <div className=" py-3 px-10 flex justify-center items-center ">
+                                <div className="w-full h-full pb-16 ">
+                                    <div className='m-auto w-3/4  '>
                                         {!chatid && FinalResponse.length === 0 &&
                                             <div className='flex justify-center items-center'>
                                                 <Image
@@ -369,7 +347,7 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                                                     height={385}
                                                     alt="#"
                                                     priority={true}
-                                                    className='size-auto'
+                                                    className='md:size-auto size-[50vw]'
                                                 />
                                             </div>}
                                         <div className='flex flex-col gap-10 '>
@@ -379,9 +357,9 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                                                         {item.role === 'user' &&
                                                             <div className=''>
                                                                 <div className='flex items-start justify-end gap-3 '>
-                                                                    <span className='text-left relative top-4 max-w-xl rounded-l-2xl rounded-br-2xl rounded-tr-sm break-words text-foreground bg-secondary  px-5 py-2 whitespace-pre-wrap select-text' >{item.content}
+                                                                    <span className=' md:text-base text-xs  text-left relative top-4 max-w-xl rounded-l-2xl rounded-br-2xl rounded-tr-sm break-words text-foreground bg-secondary  px-5 py-2 whitespace-pre-wrap select-text' >{item.content}
                                                                     </span>
-                                                                    <span className='text-foreground bg-secondary  flex items-center justify-center rounded-full w-10 h-10 overflow-hidden font-bold '>{name.charAt(0)}</span>
+                                                                    <span className=' md:text-lg text-xs text-foreground bg-secondary md:pb-1.5 flex items-center justify-center rounded-full md:w-10 md:h-10 w-7 h-7 overflow-hidden font-bold '>{name.charAt(0)}</span>
                                                                 </div>
                                                             </div>
                                                         }
@@ -392,7 +370,7 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                                                                 src="/lama.png"
                                                                 width={30}
                                                                 height={30}
-                                                                className={` ${theme !== 'light' ? 'invert' : ''}  size-auto`}
+                                                                className={` dark:invert  size-auto`}
                                                                 alt="#"
                                                             />
                                                             <div className='relative top-1.5'>
@@ -404,7 +382,7 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                                                                 src="/lama.png"
                                                                 width={30}
                                                                 height={30}
-                                                                className={` ${theme !== 'light' ? 'invert' : ''} size-auto`}
+                                                                className={` dark:invert size-auto`}
                                                                 alt="#"
                                                             />
                                                             <div className=' max-w-3xl break-words overflow-y-hidden overflow-x-auto  '>
@@ -426,7 +404,7 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                             </div>
                             <div className="relative flex justify-center items-center">
                                 <div className="bg-secondary w-2/3 fixed flex justify-center items-center rounded-full py-2 px-4 gap-2 bottom-6">
-                                    <Textarea ref={textarea} onKeyDown={handleKeyDown} onChange={() => { textChange() }} autoFocus placeholder={`${currentselectvalue ? `Message to ${currentselectvalue}` : ''}`} id="message" name="chat" rows="1" className='' disabled={!currentselectvalue} />
+                                    <Textarea ref={textarea} onKeyDown={handleKeyDown} onChange={() => { textChange() }} autoFocus placeholder={`${currentselectvalue ? `Message to ${currentselectvalue}` : ''}`} id="message" name="chat" rows="1" className='placeholder:text-xs sm:placeholder:text-sm' disabled={!currentselectvalue} />
                                     <div className="flex justify-center items-center gap-3">
                                         <Button variant={generating !== '' ? "gen" : "send"} ref={buttonRef} size={generating !== '' ? "gen" : "send"} disabled={generating !== '' ? false : !currentselectvalue || !button} onClick={() => { handleChatButtonClick() }} >
                                             {generating === 'funload' || generating === 'gen' ? <FaSquare className='size-3' /> : <IoMdArrowRoundUp className='size-5' />}
@@ -435,9 +413,9 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
                                 </div>
                                 <div className=" w-2/3 h-[23.7px] fixed bottom-0 bg-background"></div>
                             </div>
-                        </div>
-                    </ResizablePanel>
-                </ResizablePanelGroup>
+                        </main>
+                    </SidebarInset>
+                </SidebarProvider>
             </div>
         </>
     )
