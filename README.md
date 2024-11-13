@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Ollama Web UI 🌐
 
-## Getting Started
+A beautiful and user-friendly interface to run Ollama's models locally, with an option to expose the local model to the internet for broader accessibility. This project aims to make it as easy as possible to get started with large language models (LLMs) without tedious setup!
 
-First, run the development server:
+Try it online: [ollama-web-ui.vercel.app](https://ollama-web-ui.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+> **Note**: This project uses MongoDB instead of local storage, providing better performance and scalability.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features 🎉
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- **Beautiful & Intuitive UI**: Inspired by ChatGPT to enhance user familiarity and ease of use.
+- **MongoDB Compatible**: Ensures high performance and scalability for chat storage.
+- **Fully Responsive**: Chat seamlessly across devices, whether on desktop or mobile.
+- **Easy Setup**: Just clone the repo, and you're ready to go—no hassle!
+- **Code Syntax Highlighting**: Messages containing code are highlighted for easy reference.
+- **Copy Code Blocks**: Quickly copy highlighted code with a single click.
+- **Model Download/Pull**: Download or pull models directly from the interface.
+- **Quick Model Switching**: Easily switch between models with a click.
+- **Chat History**: Chats are saved and easily accessible.
+- **Light & Dark Mode**: Toggle between light and dark themes.
+- **Temporary Chats**: Engage in temporary chats without saving the history.
+- **Multiple Accounts**: Login with different accounts to manage various tasks.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Getting Started 🚀
 
-## Learn More
+You can use Ollama Web UI in two ways:
 
-To learn more about Next.js, take a look at the following resources:
+### 1. Using the Website
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Use a MongoDB Atlas URL to store chats and other data.
+- The MongoDB URL format should be: `mongodb+srv://<username>:<password>@<cluster>.mongodb.net` (Ensure access is permitted to all IPs: `0.0.0.0/0`).
+- Open [ollama-web-ui.vercel.app](https://ollama-web-ui.vercel.app).
+- Expose your local Ollama model to the internet (use a tool like [ngrok](https://ngrok.com/) for this) and paste that URL in the `OLLAMA_HOST` field on the website.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 2. Running Locally
 
-## Deploy on Vercel
+1. Clone the repository and install dependencies:
+   ```bash
+   git clone https://github.com/Syed-iqbal-Ahammad/ollama-web-ui.git
+   cd ollama-web-ui
+   npm install
+   npm run dev
+   ```
+2. Open your browser and go to `http://localhost:3000`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Upcoming Features 🛠️
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+If you show support by starring the GitHub repository, more features will be added, including:
+
+- Web Search 🔍
+- Voice-to-Text 🎙️
+- And more!
+
+## Tech Stack 💻
+
+- **Next.js**: React framework for server-side rendering and static site generation.
+- **Tailwind CSS**: Utility-first CSS framework.
+- **ShadCN-UI**: UI components built with Radix UI and Tailwind CSS.
+- **MongoDB**: NoSQL database for storing chat history and other data.
+- **Ollama REST API**: Interface for running models locally.
+
+## Helpful Links 🔗
+
+- [Ollama](https://ollama.com/) - Official Ollama website
+- [Ollama REST API Documentation](https://github.com/ollama/ollama/blob/main/docs/api.md) - API documentation for `OLLAMA_HOST`
+- [Ollama JS Library](https://github.com/ollama/ollama-js) - Official JavaScript library for `OLLAMA_HOST`
+
+--- 
+

@@ -287,8 +287,8 @@ const OllamaPage = React.forwardRef(({ chatid }, ref) => {
         <>
             <div className="bg-background text-foreground w-full h-full select-none overflow-hidden ">
                 <Toaster richColors />
-                <SidebarProvider className="w-full h-full">
-                    <Sidebar variant="inset" className="w-auto h-full " >
+                <SidebarProvider className="w-full h-full  ">
+                    <Sidebar variant="inset" className="h-full  border-r-2" >
                         <SidebarHeader className="bg-background ">
                             <div className="flex justify-between  px-1 items-center">
                                 <div>
