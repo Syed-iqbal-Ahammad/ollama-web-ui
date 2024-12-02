@@ -1,5 +1,7 @@
 # Ollama Web UI 🌐
 
+https://github.com/user-attachments/assets/44068023-462a-48ef-860f-0d07cd49baf1
+
 A beautiful and user-friendly interface to run Ollama's models locally, with an option to expose the local model to the internet for broader accessibility. This project aims to make it as easy as possible to get started with large language models (LLMs) without tedious setup!
 
 Try it online: [ollama-web-ui.vercel.app](https://ollama-web-ui.vercel.app)
