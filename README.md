@@ -23,7 +23,13 @@ Try it online: [ollama-web-ui.vercel.app](https://ollama-web-ui.vercel.app)
 
 ## Getting Started 🚀
 
-You can use Ollama Web UI in two ways:
+To use the web interface, these requisites must be met:
+
+1. Download [Ollama](https://ollama.com/download) and have it running. Or run it in a Docker container. Check the [docs](https://github.com/ollama/ollama) for instructions.
+2. Node.js (18+) and npm is required. [Download](https://nodejs.org/en/download)
+
+
+### You can use Ollama Web UI in two ways:
 
 ### 1. Using the Website
 
@@ -32,7 +38,7 @@ You can use Ollama Web UI in two ways:
 - Open [ollama-web-ui.vercel.app](https://ollama-web-ui.vercel.app).
 - Expose your local Ollama model to the internet (use a tool like [ngrok](https://ngrok.com/) for this) and paste that URL in the `OLLAMA_HOST` field on the website.
 
-### 2. Running Locally
+### 2. Running Locally (Recommended).
 
 1. Clone the repository and install dependencies:
    ```bash
